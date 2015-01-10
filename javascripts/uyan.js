@@ -1,4 +1,4 @@
-document.getElementById("nicknamemsg").style.display="none";
+//document.getElementById("nicknamemsg").style.display="none";
 /*var x1=document.getElementById("sociallogin").getElementsByTagName("div");
 x1[0].style.display="none";*/
 //
