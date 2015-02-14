@@ -27,8 +27,8 @@ for(var i=0;i<substr[0].length;i++)
 }
 if(idcheck!=trueidstr)
 {
-	document.getElementsByTagName("body").innerHTML="Welcome to setTileGroup high-rise website. You do not have permission to view this site. Ask setTileGroup administrators for more imformation. \n"+
-	 "欢迎您访问setTile工作室高层内部网站。你没有权限访问本站。请向setTile工作室的管理员咨询。";
+	document.getElementsByTagName("body")[0].innerHTML="<p>Welcome to setTileGroup high-rise website. You do not have permission to view this site. Ask setTileGroup administrators for more imformation. </p>"+
+	 "<p>欢迎您访问setTile工作室高层内部网站。你没有权限访问本站。请向setTile工作室的管理员咨询。</p>";
 }
 
 
