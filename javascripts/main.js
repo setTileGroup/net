@@ -18,7 +18,7 @@ function getCookie(c_name)
 }
 
 
-var checked=false;
+var checkedid=false;
 checkidentity();
 function checkidentity()
 {
@@ -36,14 +36,14 @@ function checkidentity()
 		{
 			a1[0].innerHTML="<p>Welcome to setTileGroup high-rise website. You do not have permission to view this site. Ask setTileGroup administrators for more imformation. </p>"+
 			"<p>欢迎您访问setTile工作室高层内部网站。你没有权限访问本站。请向setTile工作室的管理员咨询。</p>";
-			checked=true;
+			checkedid=true;
 		}
 	}
 	else
 	{
-		checked=true;
+		checkedid=true;
 	}
-	if(!checked)
+	if(!checkedid)
 	{
 		var timer1=setTimeOut("checkidentity()",100);
 	}
