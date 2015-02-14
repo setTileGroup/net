@@ -1,7 +1,7 @@
 
 /*```/*                       Minecraft ModPE Script GUI 常用控件测试 V3.6                        *\
 ````/                                                                                               \
-```/                                        by Anvil   - SetTile工作室                             \
+```/                                        by Anvil   - SetTile工作室                               \
 ``/                                                                                                   \
 `/                                        内部资料  请不要转载                                         \
 /                                                                                                       \
