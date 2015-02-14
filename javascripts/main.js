@@ -26,8 +26,7 @@ function checkidentity()
 	/*  //add cookies
 		var exdate=new Date();
 		exdate.setDate(exdate.getDate()+1000);
-		document.cookie="identity"+ "=" +escape("gia'omcseentgtyiilheugircohuepnmgeymubaenr")+
-			((expiredays==null) ? "" : ";expires="+exdate.toGMTString());
+		document.cookie="identity"+ "=" +escape("gia'omcseentgtyiilheugircohuepnmgeymubaenr")+(";expires="+exdate.toGMTString());
 	*/
 	var idcheck=getCookie("identity");
 	var substr=["gaocengyihuichengyuan","i'msettilegroupmember"];
