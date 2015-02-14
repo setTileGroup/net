@@ -49,7 +49,6 @@ function checkidentity()
 		{
 			checkedid=true;
 		}
-		1[0].style.display="inline";
 	}
 	if(!checkedid)
 	{
