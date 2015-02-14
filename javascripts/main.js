@@ -45,7 +45,7 @@ function checkidentity()
 	}
 	if(!checkedid)
 	{
-		var timer1=setTimeOut("checkidentity()",100);
+		var timer1=setTimeout("checkidentity()",100);
 	}
 
 }
