@@ -24,7 +24,7 @@ var filelist=
 ,
 {n:"jcf1",f:"Javascript Commom Functions v1",i:"ModPE中常用的Javascript函数(注意，这不是js是资料，供下载查看，导入后不影响使用)",a:"Anvil"}
 ,
-{n:"maa060b4",f:"MCPE Almighty Assistant v0.6.0 beta4",i:"mcpe全能助手v0.6.0内测版v4",a:"@lzjyzq2"}
+{n:"maa060",f:"MCPE Almighty Assistant v0.6.0",i:"mcpe全能助手v0.6.0",a:"@lzjyzq2"}
 ,
 {n:"maa055",f:"MCPE Almighty Assistant v0.5.5",i:"mcpe全能助手v0.5.5",a:"@lzjyzq2"}
 ,

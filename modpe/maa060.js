@@ -55,10 +55,7 @@ var wq=false;    //一键砍树
 var xq=false;    //雪球传送
 
 
-var helpmsg={
-shuawupin:"      添加物品的三种方法：\n 1.点击[全部物品]，打开物品列表(加载物品列表需要稍等一会)。\n 2.输入物品的部分或全部名称(中文名)，点击[搜索]，查找物品。\n 3.点击[手动添加]，输入物品id、附加值与数量(创造模式无法修改数量)，点击[添加]按钮，点击[添加一组]按钮则会获得64个物品。\n\n      物品列表的使用方法：\n 1.物品列表包含物品名称、物品id和物品附加值，点击一项物品可获得该物品(创造模式会把该物品设置为手中物品)。\n 2.长按一项物品会弹出菜单，可以修改物品数量并添加，也可直接添加64个。",
-shengcunguanli:""
-}
+
 
 
 var spawnOnTap=0,spawncount=1;   //点击方块生成实体的id(0为无)，数量
@@ -1259,6 +1256,7 @@ function shuawupin()    //刷物品
 		{
 			layout.removeView(buttona);
 			layout.removeView(buttonf);
+			layout.removeView(buttonvv);
 			for(var i in btns)
 			{
 				layout.removeView(btns[i]);
@@ -1448,6 +1446,85 @@ function shuawupin()    //刷物品
 		layout.addView(buttonf);
 
 
+		var buttonvv=newColorButton();
+		buttonvv.setText("随机抽奖");
+		buttonvv.setOnClickListener(new android.view.View.OnClickListener(
+		{
+			onClick:function(viewarg)
+			{
+				var dialog=new android.app.AlertDialog.Builder(ctx);
+				dialog.setTitle("随机抽奖");
+				dialog.setMessage("您是否要抽奖？");
+				dialog.setPositiveButton("确定",new android.content.DialogInterface.OnClickListener()
+				{
+					onClick:
+					function(dia,w)
+					{
+						var randomorder=parseInt(Math.random()*items_map.length);  //从物品表中抽取物品
+						var randomnum=parseInt(Math.random()*15)+1;  //最多获得16个物品
+						var nospecial=true;
+						if(items_map[randomorder].n.indexOf("*")>-1)   //检测是否抽中带*号的物品
+						{
+							nospecial=false;
+						}
+						if(nospecial==true)
+						{
+							var dialog=new android.app.AlertDialog.Builder(ctx);
+							dialog.setTitle("随机抽奖");
+							dialog.setMessage("您抽中了"+randomnum+"个'"+items_map[randomorder].n+"' ("+items_map[randomorder].i+":"+items_map[randomorder].d+") 。" );
+							dialog.setPositiveButton("确定",new android.content.DialogInterface.OnClickListener()
+							{
+								onClick:
+								function(dia,w)
+								{
+									if(Level.getGameMode()==1)
+									{
+										Entity.setCarriedItem(getPlayerEnt(),items_map[randomorder].i,1,items_map[randomorder].d);
+									}
+									else
+									{
+										Player.addItemInventory(items_map[randomorder].i,randomnum,items_map[randomorder].d);
+									}
+								}
+							});
+							dialog.setNegativeButton("放弃",new android.content.DialogInterface.OnClickListener()
+							{
+								onClick:
+								function(dia,w)
+								{
+								}
+							});
+							dialog.show();
+						}
+						else    //若抽中带*号物品则退出
+						{
+							var dialog=new android.app.AlertDialog.Builder(ctx);
+							dialog.setTitle("随机抽奖");
+							dialog.setMessage("很抱歉，您没有获得任何物品。");
+							dialog.setPositiveButton("确定",new android.content.DialogInterface.OnClickListener()
+							{
+								onClick:
+								function(dia,w)
+								{
+								}
+							});
+							dialog.show();
+						}
+					}
+				});
+				dialog.setNegativeButton("取消",new android.content.DialogInterface.OnClickListener()
+				{
+					onClick:
+					function(dia,w)
+					{
+					}
+				});
+				dialog.show();
+			}
+		}));
+		layout.addView(buttonvv);
+
+
 		var buttonr=newColorButton();
 		buttonr.setText("返回");
 		buttonr.setOnClickListener(new android.view.View.OnClickListener(
@@ -1457,6 +1534,7 @@ function shuawupin()    //刷物品
 				removebtn();
 				layout.addView(buttona);
 				layout.addView(buttonf);
+				layout.addView(buttonvv);
 			}
 		}));
 
@@ -1525,7 +1603,7 @@ function cs()     //传送
 		var btns=new Array();         //存储按钮的数组
 
 		var stitle1=new android.widget.TextView(ctx);
-		stitle1.setText("   by @2639439\n长按传送点按钮删除对应传送点。");
+		stitle1.setText("长按传送点按钮删除对应传送点。");
 		stitle1.setTextSize(14);
 		stitle1.setTextColor(android.graphics.Color.argb(255,210,245,255));
 		layout.addView(stitle1);
@@ -1624,83 +1702,6 @@ function shengc()    //生存管理
 		layout.addView(buttot);
 
 
-
-		var buttonvv=newColorButton();
-		buttonvv.setText("随机抽奖");
-		buttonvv.setOnClickListener(new android.view.View.OnClickListener(
-		{
-			onClick:function(viewarg)
-			{
-				var wpid1=Level.getTime()-Math.floor(Level.getTime()/100)*100;
-				var dialog=new android.app.AlertDialog.Builder(ctx);
-				dialog.setTitle("随机抽奖");
-				dialog.setMessage("你要抽奖吗？");
-				dialog.setPositiveButton("要",new android.content.DialogInterface.OnClickListener()
-				{
-					onClick:
-					function(dia,w)
-					{
-						var wpid2=Level.getTime()-Math.floor(Level.getTime()/100)*100;
-						var wpid3=Level.getTime()-Math.floor(Level.getTime()/100)*100;
-						var wpid=wpid1+wpid2+wpid3;
-						
-						var wpsl=Math.round(Math.random()*80);
-						if(wpsl>64)
-						{
-							wpsl=wpsl-64;
-						}
-						if(wpid>255)
-						{
-							wpid=0;
-							var dialog=new android.app.AlertDialog.Builder(ctx);
-							dialog.setTitle("随机抽奖");
-							dialog.setMessage("很抱歉，您没有获得任何物品。");
-							dialog.setPositiveButton("确定",new android.content.DialogInterface.OnClickListener()
-							{
-								onClick:
-								function(dia,w)
-								{
-								}
-							});
-							dialog.show();
-						}
-						if(wpid>0)
-						{
-							var dialog=new android.app.AlertDialog.Builder(ctx);
-							dialog.setTitle("随机抽奖");
-							dialog.setMessage("您获得了id为:"+wpid+"的物品;数量为:"+wpsl);
-							dialog.setPositiveButton("确定",new android.content.DialogInterface.OnClickListener()
-							{
-								onClick:
-								function(dia,w)
-								{
-									Player.addItemInventory(wpid,wpsl,0);
-								}
-							});
-							dialog.setNegativeButton("放弃",new android.content.DialogInterface.OnClickListener()
-							{
-								onClick:
-								function(dia,w)
-								{
-								}
-							});
-							dialog.show();
-						}
-					}
-				});
-				dialog.setNegativeButton("不愿意",new android.content.DialogInterface.OnClickListener()
-				{
-					onClick:
-					function(dia,w)
-					{
-					}
-				});
-				dialog.show();
-			}
-		}));
-		layout.addView(buttonvv);
-
-
 		var buttoa=newColorButton();
 		buttoa.setText("盔甲修复");
 		buttoa.setOnClickListener(new android.view.View.OnClickListener(
@@ -1785,7 +1786,7 @@ function stgl()      //实体管理
 
 
 		var stitle1=new android.widget.TextView(ctx);
-		stitle1.setText("   by @lzjyzq2\n         @2639439\n生物骑乘：点击生物骑乘上去，生物会跟随玩家方向移动。");
+		stitle1.setText("生物骑乘：点击生物骑乘上去，生物会跟随玩家方向移动。");
 		stitle1.setTextSize(14);
 		stitle1.setTextColor(android.graphics.Color.argb(255,210,245,255));
 		layout.addView(stitle1);
@@ -2901,10 +2902,6 @@ function leaveGame()
 	gamespeed=20;
 	warps=new Array();
 	spawnOnTap=0;
-	nuke=0;zl=0;cen=0;sml=0;big=0;dsx=0;dsj=0;ryh=0;  //科技武器
-	qj=false;csj=false;rsj=false;	   //小技能						
-	bzj=false;    //爆炸箭
-	pf=false;     //实体皮肤
 	ride=false;riding=false;  //骑乘
 	attackmobtime=0;    //生物血量显示
 	btnbackground=new Array();   //按钮背景色
@@ -3040,33 +3037,6 @@ run: 				function()
 
 function useItem(x,y,z,itemid,blockid,side,itemDamage,blockDamage)
 {
-	if(wk==true)     //挖矿精灵
-	{
-		if(itemid==270||itemid==257||itemid==285||itemid==278||itemid==274)
-		{
-			var b=0,ti1=0;
-			if(blockid==14||blockid==15||blockid==16||blockid==21||blockid==56||blockid==73)
-			{
-				clientMessage("你点击的方块就是矿石！");
-				b=128;
-			}
-			for( ; b<128; b++)
-			{
-				ti1=getTile(x,y-b,z);
-				if(ti1==14||ti1==15||ti1==16||ti1==21||ti1==56||ti1==73)
-				{
-					clientMessage("此处有矿石，位于地下"+b+"层处。");
-					break;
-				}
-				if(ti1==7)
-				{
-					clientMessage("此处没有矿石。");
-					break;
-				}
-			}
-		}
-	}
-
 	if(spawnOnTap!=0)     //生成实体
 	{
 		for (var i=0; i<spawncount; i++)
@@ -3077,11 +3047,6 @@ function useItem(x,y,z,itemid,blockid,side,itemDamage,blockDamage)
 		preventDefault();
 	}
 
-	if(fk==true)           //方块复制
-	{
-		preventDefault();
-		Level.dropItem(x,y,z,0,blockid,1,blockDamage);
-	}
 
 
 }
@@ -3141,22 +3106,34 @@ function entityRemovedHook(ent)
 
 	if(xq==true)   //雪球传送
 	{
-		var io=0;
 		if(Entity.getEntityTypeId(ent)==81)
 		{
-			x=Entity.getX(ent);
-			y=Entity.getY(ent);
-			z=Entity.getZ(ent);
-			io=0;
-			if(y<0)
+			var tpmark=false;
+			x=parseInt(Entity.getX(ent));
+			y=parseInt(Entity.getY(ent));
+			z=parseInt(Entity.getZ(ent));
+			if(y>0)
 			{
-				io=1;
+				var posarr=[0,-1,1];
+				for(var i=0;i<2;i++)
+				{
+					for(var j=0;j<3;j++)
+					{
+						for(var k=0;k<3;k++)
+						{
+							if(tpmark==false&&Level.getTile(x+posarr[j],y+posarr[i]+2,z+posarr[k])==0&&Level.getTile(x+posarr[j],y+posarr[i]+3,z+posarr[k])==0)  //两格空气
+							{
+								Entity.setPosition(getPlayerEnt(),x+posarr[j]+0.5,y+posarr[i]+3,z+posarr[k]+0.5);
+								tpmark=true;
+								clientMessage("已传送");
+							}
+						}
+					}
+				}
 			}
-			if(io!=1)
+			if(tpmark==false||y<0)
 			{
-				Entity.setPosition(getPlayerEnt(),x,y+2,z);
-				io=0;
-				clientMessage("已传送");
+				clientMessage("传送失败");
 			}
 		}
 	}
@@ -3191,9 +3168,14 @@ function attackHook(attacker,victim)
 
 
 
+//帮助信息
+var helpmsg={
+shuawupin:"      添加物品的三种方法：\n 1.点击[全部物品]，打开物品列表(加载物品列表需要稍等一会)。\n 2.输入物品的部分或全部名称(中文名)，点击[搜索]，查找物品。\n 3.点击[手动添加]，输入物品id、附加值与数量(创造模式无法修改数量)，点击[添加]按钮，点击[添加一组]按钮则会获得64个物品。\n\n      物品列表的使用方法：\n 1.物品列表包含物品名称、物品id和物品附加值(名称带有*号的物品是常规游戏无法得到的技术性方块或物品)，点击一项物品可获得该物品(创造模式会把该物品设置为手中物品)。\n 2.长按一项物品会弹出菜单，可以修改物品数量并添加，也可直接添加64个。\n\n      随机抽奖：\n点击[确定]随机获得一样物品(不会是技术性方块或物品，有一定几率不获得物品)，最多获得15个(创造模式会把该物品设置为手中物品)，抽中物品后点击[放弃]则不会获得该物品。",
+shengcunguanli:""
+}
 
 //物品表(经过压缩)
-var items_map=eval(function(p,a,c,k,e,r){e=function(c){return c.toString(36)};if('0'.replace(0,e)==0){while(c--)r[e(c)]=k[c];k=[function(e){return r[e]||e}];e=function(){return'[a-ce-hj-mo-v]'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('[{n:"石头",i:1,d:0},{n:"花岗岩",i:1,d:1},{n:"磨制花岗岩",i:1,d:2},{n:"闪长岩",i:1,d:3},{n:"磨制闪长岩",i:1,d:4},{n:"安山岩",i:1,d:5},{n:"磨制安山岩",i:1,d:6},{n:"草方块",i:2,d:0},{n:"泥土",i:3,d:0},{n:"圆石",i:4,d:0},{n:"橡木木板",i:5,d:0},{n:"云杉木板",i:5,d:1},{n:"桦木木板",i:5,d:2},{n:"丛林木板",i:5,d:3},{n:"金合欢木板",i:5,d:4},{n:"深色橡木木板",i:5,d:5},{n:"橡树树苗",i:6,d:0},{n:"云杉树苗",i:6,d:1},{n:"白桦树苗",i:6,d:2},{n:"丛林树苗",i:6,d:3},{n:"金合树苗",i:6,d:4},{n:"深色橡树树苗",i:6,d:5},{n:"基岩",i:7,d:0},{n:"沙子",i:12,d:0},{n:"红沙",i:12,d:1},{n:"砂砾",i:13,d:0},{n:"金矿石",i:14,d:0},{n:"铁矿石",i:15,d:0},{n:"煤矿石",i:16,d:0},{n:"橡木",i:17,d:0},{n:"云杉木",i:17,d:1},{n:"桦木",i:17,d:2},{n:"丛林木",i:17,d:3},{n:"橡树树叶",i:18,d:0},{n:"云杉树叶",i:18,d:1},{n:"白桦树叶",i:18,d:2},{n:"丛林树叶",i:18,d:3},{n:"玻璃",i:20,d:0},{n:"青金石矿石",i:21,d:0},{n:"青金石块",i:22,d:0},{n:"沙石",i:24,d:0},{n:"錾制沙石",i:24,d:1},{n:"平滑沙石",i:24,d:2},{n:"动力铁轨",i:27,d:0},{n:"蜘蛛网",i:30,d:0},{n:"草丛",i:31,d:1},{n:"蕨",i:31,d:2},{n:"枯死的灌木",i:32,d:0},{n:"白色羊毛",i:35,d:0},{n:"橙色羊毛",i:35,d:1},{n:"品红色羊毛",i:35,d:2},{n:"淡蓝色羊毛",i:35,d:3},{n:"黄色羊毛",i:35,d:4},{n:"黄绿色羊毛",i:35,d:5},{n:"粉红色羊毛",i:35,d:6},{n:"灰色羊毛",i:35,d:7},{n:"淡灰色羊毛",i:35,d:8},{n:"青色羊毛",i:35,d:9},{n:"紫色羊毛",i:35,d:10},{n:"蓝色羊毛",i:35,d:11},{n:"棕色羊毛",i:35,d:12},{n:"绿色羊毛",i:35,d:13},{n:"红色羊毛",i:35,d:14},{n:"黑色羊毛",i:35,d:15},{n:"罂粟",i:38,d:0},{n:"兰花",i:38,d:1},{n:"绒球葱",i:38,d:2},{n:"茜草花",i:38,d:3},{n:"红色郁金香",i:38,d:4},{n:"橙色郁金香",i:38,d:5},{n:"白色郁金香",i:38,d:6},{n:"粉红色郁金香",i:38,d:7},{n:"法西兰菊",i:38,d:8},{n:"棕蘑菇",i:39,d:0},{n:"红蘑菇",i:40,d:0},{n:"金块",i:41,d:0},{n:"铁块",i:42,d:0},{n:"双石台阶",i:f,d:0},{n:"双沙石台阶",i:f,d:1},{n:"双圆石台阶",i:f,d:3},{n:"双砖块台阶",i:f,d:4},{n:"双石砖台阶",i:f,d:5},{n:"双石英台阶",i:f,d:6},{n:"石台阶",i:g,d:0},{n:"沙石台阶",i:g,d:1},{n:"圆石台阶",i:g,d:3},{n:"砖块台阶",i:g,d:4},{n:"石砖台阶",i:g,d:5},{n:"石英台阶",i:g,d:6},{n:"砖块",i:45,d:0},{n:"TNT",i:46,d:0},{n:"书架",i:47,d:0},{n:"苔石",i:48,d:0},{n:"黑曜石",i:49,d:0},{n:"火把",i:50,d:0},{n:"刷怪笼",i:52,d:0},{n:"橡木楼梯",i:53,d:0},{n:"箱子",i:54,d:0},{n:"钻石矿石",i:56,d:0},{n:"钻石块",i:57,d:0},{n:"工作台",i:58,d:0},{n:"熔炉",i:61,d:0},{n:"梯子",i:65,d:0},{n:"铁轨",i:66,d:0},{n:"圆石楼梯",i:67,d:0},{n:"红石矿石",i:73,d:0},{n:"雪",i:78,d:0},{n:"冰",i:79,d:0},{n:"雪块",i:80,d:0},{n:"仙人掌",i:81,d:0},{n:"粘土块",i:82,d:0},{n:"橡木栅栏",i:h,d:0},{n:"云杉木栅栏",i:h,d:1},{n:"白桦木栅栏",i:h,d:2},{n:"丛林木栅栏",i:h,d:3},{n:"金合欢栅栏",i:h,d:4},{n:"深色橡木栅栏",i:h,d:5},{n:"南瓜",i:86,d:0},{n:"地狱岩",i:87,d:0},{n:"荧石",i:89,d:0},{n:"南瓜灯",i:91,d:6},{n:"陷阱门",i:96,d:0},{n:"石砖",i:m,d:0},{n:"苔石砖",i:m,d:1},{n:"裂石砖",i:m,d:2},{n:"錾制石砖",i:m,d:3},{n:"棕色巨型蘑菇(心)",i:p,d:0},{n:"棕色巨型蘑菇(梗)",i:p,d:10},{n:"棕色巨型蘑菇(盖)",i:p,d:14},{n:"红色巨型蘑菇(心)",i:q,d:0},{n:"红色巨型蘑菇(梗)",i:q,d:10},{n:"红色巨型蘑菇(盖)",i:q,d:14},{n:"玻璃板",i:102,d:0},{n:"西瓜",i:103,d:0},{n:"藤蔓",i:106,d:0},{n:"橡木栅栏门",i:107,d:0},{n:"砖块楼梯",i:108,d:0},{n:"石砖楼梯",i:109,d:0},{n:"菌丝",i:110,d:0},{n:"睡莲",i:111,d:0},{n:"地狱砖块",i:112,d:0},{n:"地狱砖楼梯",i:114,d:0},{n:"末地传送门框架",i:120,d:0},{n:"末地石",i:121,d:0},{n:"沙石楼梯",i:128,d:0},{n:"绿宝石矿石",i:129,d:0},{n:"绿宝石块",i:133,d:0},{n:"云杉楼梯",i:134,d:0},{n:"桦木楼梯",i:135,d:0},{n:"丛林楼梯",i:136,d:0},{n:"圆石墙",i:s,d:0},{n:"苔石墙",i:s,d:1},{n:"石英块",i:r,d:0},{n:"錾制石英块",i:r,d:1},{n:"竖纹石英块",i:r,d:2},{n:"石英楼梯",i:156,d:0},{n:"双橡木台阶",i:j,d:0},{n:"双云杉台阶",i:j,d:1},{n:"双桦木台阶",i:j,d:2},{n:"双丛林台阶",i:j,d:3},{n:"双金合欢台阶",i:j,d:4},{n:"双深色橡木台阶",i:j,d:5},{n:"橡木台阶",i:k,d:0},{n:"云杉台阶",i:k,d:1},{n:"桦木台阶",i:k,d:2},{n:"丛林台阶",i:k,d:3},{n:"金合欢台阶",i:k,d:4},{n:"深色橡木台阶",i:k,d:5},{n:"白色染色粘土",i:a,d:0},{n:"橙色染色粘土",i:a,d:1},{n:"品红色染色粘土",i:a,d:2},{n:"淡蓝色染色粘土",i:a,d:3},{n:"黄色染色粘土",i:a,d:4},{n:"黄绿色染色粘土",i:a,d:5},{n:"粉红色染色粘土",i:a,d:6},{n:"灰色染色粘土",i:a,d:7},{n:"淡灰色染色粘土",i:a,d:8},{n:"青色染色粘土",i:a,d:9},{n:"紫色染色粘土",i:a,d:10},{n:"蓝色染色粘土",i:a,d:11},{n:"棕色染色粘土",i:a,d:12},{n:"绿色染色粘土",i:a,d:13},{n:"红色染色粘土",i:a,d:14},{n:"黑色染色粘土",i:a,d:15},{n:"金合欢树叶",i:t,d:0},{n:"深色橡树树叶",i:t,d:1},{n:"金合欢木",i:u,d:0},{n:"深色橡木",i:u,d:1},{n:"金合欢楼梯",i:163,d:0},{n:"深色橡木楼梯",i:164,d:0},{n:"干草块",i:170,d:0},{n:"白色羊毛地毯",i:b,d:0},{n:"橙色羊毛地毯",i:b,d:1},{n:"品红色羊毛地毯",i:b,d:2},{n:"淡蓝色羊毛地毯",i:b,d:3},{n:"黄色羊毛地毯",i:b,d:4},{n:"黄绿色羊毛地毯",i:b,d:5},{n:"粉红色羊毛地毯",i:b,d:6},{n:"灰色羊毛地毯",i:b,d:7},{n:"淡灰色羊毛地毯",i:b,d:8},{n:"青色羊毛地毯",i:b,d:9},{n:"紫色羊毛地毯",i:b,d:10},{n:"蓝色羊毛地毯",i:b,d:11},{n:"棕色羊毛地毯",i:b,d:12},{n:"绿色羊毛地毯",i:b,d:13},{n:"红色羊毛地毯",i:b,d:14},{n:"黑色羊毛地毯",i:b,d:15},{n:"硬化粘土",i:172,d:0},{n:"煤块",i:173,d:0},{n:"浮冰",i:174,d:0},{n:"向日葵",i:l,d:0},{n:"欧丁香",i:l,d:1},{n:"双草丛",i:l,d:2},{n:"大型蕨",i:l,d:3},{n:"玫瑰丛",i:l,d:4},{n:"牡丹",i:l,d:5},{n:"云杉木栅栏门",i:183,d:0},{n:"白桦木栅栏门",i:184,d:0},{n:"丛林木栅栏门",i:185,d:0},{n:"深色橡木栅栏门",i:186,d:0},{n:"金合欢栅栏门",i:187,d:0},{n:"灰化土",i:243,d:0},{n:"石材切割机",i:245,d:0},{n:"发光的黑曜石",i:246,d:0},{n:"下界反应核",i:247,d:0},{n:"铁锹",i:256,d:0},{n:"铁镐",i:257,d:0},{n:"铁斧",i:258,d:0},{n:"打火石",i:259,d:0},{n:"苹果",i:260,d:0},{n:"弓",i:261,d:0},{n:"箭",i:262,d:0},{n:"煤炭",i:v,d:0},{n:"木炭",i:v,d:1},{n:"钻石",i:264,d:0},{n:"铁锭",i:265,d:0},{n:"金锭",i:266,d:0},{n:"铁剑",i:267,d:0},{n:"木剑",i:268,d:0},{n:"木锹",i:269,d:0},{n:"木镐",i:270,d:0},{n:"木斧",i:271,d:0},{n:"石剑",i:272,d:0},{n:"石锹",i:273,d:0},{n:"石镐",i:274,d:0},{n:"石斧",i:275,d:0},{n:"钻石剑",i:276,d:0},{n:"钻石锹",i:277,d:0},{n:"钻石镐",i:278,d:0},{n:"钻石斧",i:279,d:0},{n:"木棍",i:280,d:0},{n:"碗",i:281,d:0},{n:"蘑菇汤",i:282,d:0},{n:"金剑",i:283,d:0},{n:"金锹",i:284,d:0},{n:"金镐",i:285,d:0},{n:"金斧",i:286,d:0},{n:"蜘蛛丝",i:287,d:0},{n:"羽毛",i:288,d:0},{n:"火药",i:289,d:0},{n:"木锄",i:290,d:0},{n:"石锄",i:291,d:0},{n:"铁锄",i:292,d:0},{n:"钻石锄",i:293,d:0},{n:"金锄",i:294,d:0},{n:"小麦种子",i:295,d:0},{n:"小麦",i:296,d:0},{n:"面包",i:297,d:0},{n:"皮革帽子",i:298,d:0},{n:"皮革外套",i:299,d:0},{n:"皮革裤子",i:300,d:0},{n:"皮革鞋子",i:301,d:0},{n:"锁链头盔",i:302,d:0},{n:"锁链胸甲",i:303,d:0},{n:"锁链护腿",i:304,d:0},{n:"锁链靴子",i:305,d:0},{n:"铁头盔",i:306,d:0},{n:"铁胸甲",i:307,d:0},{n:"铁护腿",i:308,d:0},{n:"铁靴子",i:309,d:0},{n:"钻石头盔",i:310,d:0},{n:"钻石胸甲",i:311,d:0},{n:"钻石护腿",i:312,d:0},{n:"钻石靴子",i:313,d:0},{n:"金头盔",i:314,d:0},{n:"金胸甲",i:315,d:0},{n:"金护腿",i:316,d:0},{n:"金靴子",i:317,d:0},{n:"燧石",i:318,d:0},{n:"生猪排",i:319,d:0},{n:"熟猪排",i:320,d:0},{n:"画",i:321,d:0},{n:"告示牌",i:323,d:0},{n:"木门",i:324,d:0},{n:"牛奶桶",i:o,d:1},{n:"桶",i:o,d:0},{n:"水桶",i:o,d:8},{n:"岩浆桶",i:o,d:10},{n:"矿车",i:328,d:0},{n:"鞍",i:329,d:0},{n:"铁门",i:330,d:0},{n:"红石粉",i:331,d:0},{n:"雪球",i:332,d:0},{n:"皮革",i:334,d:0},{n:"红砖",i:336,d:0},{n:"粘土",i:337,d:0},{n:"甘蔗",i:338,d:0},{n:"纸",i:339,d:0},{n:"书",i:340,d:0},{n:"粘液球",i:341,d:0},{n:"鸡蛋",i:344,d:0},{n:"指南针",i:345,d:0},{n:"钟",i:347,d:0},{n:"荧石粉",i:348,d:0},{n:"墨囊",i:c,d:0},{n:"玫瑰红",i:c,d:1},{n:"仙人掌绿",i:c,d:2},{n:"可可豆",i:c,d:3},{n:"青金石",i:c,d:4},{n:"紫色染料",i:c,d:5},{n:"青色染料",i:c,d:6},{n:"淡灰色染料",i:c,d:7},{n:"灰色染料",i:c,d:8},{n:"粉色染料",i:c,d:9},{n:"黄绿色染料",i:c,d:10},{n:"蒲公英黄",i:c,d:11},{n:"淡蓝色染料",i:c,d:12},{n:"品红色染料",i:c,d:13},{n:"橙色染料",i:c,d:14},{n:"骨粉",i:c,d:15},{n:"骨头",i:352,d:0},{n:"糖",i:353,d:0},{n:"蛋糕",i:354,d:0},{n:"床",i:355,d:0},{n:"曲奇",i:357,d:0},{n:"剪刀",i:359,d:0},{n:"西瓜片",i:360,d:0},{n:"南瓜种子",i:361,d:0},{n:"西瓜种子",i:362,d:0},{n:"生牛排",i:363,d:0},{n:"熟牛排",i:364,d:0},{n:"生鸡肉",i:365,d:0},{n:"熟鸡肉",i:366,d:0},{n:"刷怪蛋(鸡)",i:e,d:10},{n:"刷怪蛋(牛)",i:e,d:11},{n:"刷怪蛋(猪)",i:e,d:12},{n:"刷怪蛋(羊)",i:e,d:13},{n:"刷怪蛋(狼)",i:e,d:14},{n:"刷怪蛋(村民)",i:e,d:15},{n:"刷怪蛋(哞菇)",i:e,d:16},{n:"刷怪蛋(僵尸)",i:e,d:32},{n:"刷怪蛋(爬行者)",i:e,d:33},{n:"刷怪蛋(骷髅)",i:e,d:34},{n:"刷怪蛋(蜘蛛)",i:e,d:35},{n:"刷怪蛋(僵尸猪人)",i:e,d:36},{n:"刷怪蛋(史莱姆)",i:e,d:37},{n:"刷怪蛋(末影人)",i:e,d:38},{n:"刷怪蛋(蠹虫)",i:e,d:39},{n:"绿宝石",i:388,d:0},{n:"胡萝卜",i:391,d:0},{n:"土豆",i:392,d:0},{n:"烤土豆",i:393,d:0},{n:"南瓜派",i:400,d:1},{n:"地狱砖",i:405,d:0},{n:"下界石英",i:406,d:0},{n:"甜菜根",i:457,d:0},{n:"甜菜种子",i:458,d:0},{n:"甜菜汤",i:459,d:0},{n:"流动的水*",i:8,d:0},{n:"静止的水*",i:9,d:0},{n:"流动的岩浆*",i:10,d:0},{n:"静止的岩浆*",i:11,d:0},{n:"床(方块)*",i:26,d:0},{n:"蕨(外观为草丛)*",i:31,d:0},{n:"木台阶(旧版)*",i:g,d:2},{n:"双木台阶(旧版)*",i:f,d:2},{n:"石台阶(旧版)*",i:g,d:7},{n:"双石台阶(旧版)*",i:f,d:7},{n:"火方块*",i:51,d:0},{n:"小麦庄稼*",i:59,d:0},{n:"耕地*",i:60,d:0},{n:"燃烧的熔炉*",i:62,d:0},{n:"告示牌(放在地上)*",i:63,d:0},{n:"木门(方块)*",i:64,d:0},{n:"告示牌(放在墙上)*",i:68,d:0},{n:"铁门(方块)*",i:71,d:0},{n:"发光的红石矿石*",i:74,d:0},{n:"甘蔗方块*",i:83,d:0},{n:"蛋糕方块*",i:92,d:0},{n:"隐形基岩*",i:95,d:0},{n:"南瓜梗*",i:104,d:0},{n:"西瓜梗*",i:105,d:0},{n:"可可果*",i:127,d:0},{n:"胡萝卜庄稼*",i:141,d:0},{n:"马铃薯庄稼*",i:142,d:0},{n:"甜菜庄稼*",i:244,d:0},{n:"游戏更新方块(1)*",i:248,d:0},{n:"游戏更新方块(2)*",i:249,d:0},{n:".name(技术方块)*",i:255,d:0}]',[],32,'||||||||||159|171|351||383|43|44|85||157|158|175|98||325|99|100|155|139|161|162|263'.split('|'),0,{}));
+var items_map=eval(function(p,a,c,k,e,r){e=function(c){return c.toString(36)};if('0'.replace(0,e)==0){while(c--)r[e(c)]=k[c];k=[function(e){return r[e]||e}];e=function(){return'[a-ce-hj-mo-v]'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('[{n:"石头",i:1,d:0},{n:"花岗岩",i:1,d:1},{n:"磨制花岗岩",i:1,d:2},{n:"闪长岩",i:1,d:3},{n:"磨制闪长岩",i:1,d:4},{n:"安山岩",i:1,d:5},{n:"磨制安山岩",i:1,d:6},{n:"草方块",i:2,d:0},{n:"泥土",i:3,d:0},{n:"圆石",i:4,d:0},{n:"橡木木板",i:5,d:0},{n:"云杉木板",i:5,d:1},{n:"桦木木板",i:5,d:2},{n:"丛林木板",i:5,d:3},{n:"金合欢木板",i:5,d:4},{n:"深色橡木木板",i:5,d:5},{n:"橡树树苗",i:6,d:0},{n:"云杉树苗",i:6,d:1},{n:"白桦树苗",i:6,d:2},{n:"丛林树苗",i:6,d:3},{n:"金合树苗",i:6,d:4},{n:"深色橡树树苗",i:6,d:5},{n:"基岩",i:7,d:0},{n:"沙子",i:12,d:0},{n:"红沙",i:12,d:1},{n:"沙砾",i:13,d:0},{n:"金矿石",i:14,d:0},{n:"铁矿石",i:15,d:0},{n:"煤矿石",i:16,d:0},{n:"橡木",i:17,d:0},{n:"云杉木",i:17,d:1},{n:"桦木",i:17,d:2},{n:"丛林木",i:17,d:3},{n:"橡树树叶",i:18,d:0},{n:"云杉树叶",i:18,d:1},{n:"白桦树叶",i:18,d:2},{n:"丛林树叶",i:18,d:3},{n:"玻璃",i:20,d:0},{n:"青金石矿石",i:21,d:0},{n:"青金石块",i:22,d:0},{n:"沙石",i:24,d:0},{n:"錾制沙石",i:24,d:1},{n:"平滑沙石",i:24,d:2},{n:"动力铁轨",i:27,d:0},{n:"蜘蛛网",i:30,d:0},{n:"草丛",i:31,d:1},{n:"蕨",i:31,d:2},{n:"枯死的灌木",i:32,d:0},{n:"白色羊毛",i:35,d:0},{n:"橙色羊毛",i:35,d:1},{n:"品红色羊毛",i:35,d:2},{n:"淡蓝色羊毛",i:35,d:3},{n:"黄色羊毛",i:35,d:4},{n:"黄绿色羊毛",i:35,d:5},{n:"粉红色羊毛",i:35,d:6},{n:"灰色羊毛",i:35,d:7},{n:"淡灰色羊毛",i:35,d:8},{n:"青色羊毛",i:35,d:9},{n:"紫色羊毛",i:35,d:10},{n:"蓝色羊毛",i:35,d:11},{n:"棕色羊毛",i:35,d:12},{n:"绿色羊毛",i:35,d:13},{n:"红色羊毛",i:35,d:14},{n:"黑色羊毛",i:35,d:15},{n:"罂粟",i:38,d:0},{n:"兰花",i:38,d:1},{n:"绒球葱",i:38,d:2},{n:"茜草花",i:38,d:3},{n:"红色郁金香",i:38,d:4},{n:"橙色郁金香",i:38,d:5},{n:"白色郁金香",i:38,d:6},{n:"粉红色郁金香",i:38,d:7},{n:"法西兰菊",i:38,d:8},{n:"棕蘑菇",i:39,d:0},{n:"红蘑菇",i:40,d:0},{n:"金块",i:41,d:0},{n:"铁块",i:42,d:0},{n:"双石台阶",i:f,d:0},{n:"双沙石台阶",i:f,d:1},{n:"双圆石台阶",i:f,d:3},{n:"双砖块台阶",i:f,d:4},{n:"双石砖台阶",i:f,d:5},{n:"双石英台阶",i:f,d:6},{n:"石台阶",i:g,d:0},{n:"沙石台阶",i:g,d:1},{n:"圆石台阶",i:g,d:3},{n:"砖块台阶",i:g,d:4},{n:"石砖台阶",i:g,d:5},{n:"石英台阶",i:g,d:6},{n:"砖块",i:45,d:0},{n:"TNT",i:46,d:0},{n:"书架",i:47,d:0},{n:"苔石",i:48,d:0},{n:"黑曜石",i:49,d:0},{n:"火把",i:50,d:0},{n:"刷怪笼",i:52,d:0},{n:"橡木楼梯",i:53,d:0},{n:"箱子",i:54,d:0},{n:"钻石矿石",i:56,d:0},{n:"钻石块",i:57,d:0},{n:"工作台",i:58,d:0},{n:"熔炉",i:61,d:0},{n:"梯子",i:65,d:0},{n:"铁轨",i:66,d:0},{n:"圆石楼梯",i:67,d:0},{n:"红石矿石",i:73,d:0},{n:"雪",i:78,d:0},{n:"冰",i:79,d:0},{n:"雪块",i:80,d:0},{n:"仙人掌",i:81,d:0},{n:"粘土块",i:82,d:0},{n:"橡木栅栏",i:h,d:0},{n:"云杉木栅栏",i:h,d:1},{n:"白桦木栅栏",i:h,d:2},{n:"丛林木栅栏",i:h,d:3},{n:"金合欢栅栏",i:h,d:4},{n:"深色橡木栅栏",i:h,d:5},{n:"南瓜",i:86,d:0},{n:"地狱岩",i:87,d:0},{n:"荧石",i:89,d:0},{n:"南瓜灯",i:91,d:6},{n:"陷阱门",i:96,d:0},{n:"石砖",i:m,d:0},{n:"苔石砖",i:m,d:1},{n:"裂石砖",i:m,d:2},{n:"錾制石砖",i:m,d:3},{n:"棕色巨型蘑菇(心)",i:p,d:0},{n:"棕色巨型蘑菇(梗)",i:p,d:10},{n:"棕色巨型蘑菇(盖)",i:p,d:14},{n:"红色巨型蘑菇(心)",i:q,d:0},{n:"红色巨型蘑菇(梗)",i:q,d:10},{n:"红色巨型蘑菇(盖)",i:q,d:14},{n:"玻璃板",i:102,d:0},{n:"西瓜",i:103,d:0},{n:"藤蔓",i:106,d:0},{n:"橡木栅栏门",i:107,d:0},{n:"砖块楼梯",i:108,d:0},{n:"石砖楼梯",i:109,d:0},{n:"菌丝",i:110,d:0},{n:"睡莲",i:111,d:0},{n:"地狱砖块",i:112,d:0},{n:"地狱砖楼梯",i:114,d:0},{n:"末地传送门框架",i:120,d:0},{n:"末地石",i:121,d:0},{n:"沙石楼梯",i:128,d:0},{n:"绿宝石矿石",i:129,d:0},{n:"绿宝石块",i:133,d:0},{n:"云杉楼梯",i:134,d:0},{n:"桦木楼梯",i:135,d:0},{n:"丛林楼梯",i:136,d:0},{n:"圆石墙",i:s,d:0},{n:"苔石墙",i:s,d:1},{n:"石英块",i:r,d:0},{n:"錾制石英块",i:r,d:1},{n:"竖纹石英块",i:r,d:2},{n:"石英楼梯",i:156,d:0},{n:"双橡木台阶",i:j,d:0},{n:"双云杉台阶",i:j,d:1},{n:"双桦木台阶",i:j,d:2},{n:"双丛林台阶",i:j,d:3},{n:"双金合欢台阶",i:j,d:4},{n:"双深色橡木台阶",i:j,d:5},{n:"橡木台阶",i:k,d:0},{n:"云杉台阶",i:k,d:1},{n:"桦木台阶",i:k,d:2},{n:"丛林台阶",i:k,d:3},{n:"金合欢台阶",i:k,d:4},{n:"深色橡木台阶",i:k,d:5},{n:"白色染色粘土",i:a,d:0},{n:"橙色染色粘土",i:a,d:1},{n:"品红色染色粘土",i:a,d:2},{n:"淡蓝色染色粘土",i:a,d:3},{n:"黄色染色粘土",i:a,d:4},{n:"黄绿色染色粘土",i:a,d:5},{n:"粉红色染色粘土",i:a,d:6},{n:"灰色染色粘土",i:a,d:7},{n:"淡灰色染色粘土",i:a,d:8},{n:"青色染色粘土",i:a,d:9},{n:"紫色染色粘土",i:a,d:10},{n:"蓝色染色粘土",i:a,d:11},{n:"棕色染色粘土",i:a,d:12},{n:"绿色染色粘土",i:a,d:13},{n:"红色染色粘土",i:a,d:14},{n:"黑色染色粘土",i:a,d:15},{n:"金合欢树叶",i:t,d:0},{n:"深色橡树树叶",i:t,d:1},{n:"金合欢木",i:u,d:0},{n:"深色橡木",i:u,d:1},{n:"金合欢楼梯",i:163,d:0},{n:"深色橡木楼梯",i:164,d:0},{n:"干草块",i:170,d:0},{n:"白色羊毛地毯",i:b,d:0},{n:"橙色羊毛地毯",i:b,d:1},{n:"品红色羊毛地毯",i:b,d:2},{n:"淡蓝色羊毛地毯",i:b,d:3},{n:"黄色羊毛地毯",i:b,d:4},{n:"黄绿色羊毛地毯",i:b,d:5},{n:"粉红色羊毛地毯",i:b,d:6},{n:"灰色羊毛地毯",i:b,d:7},{n:"淡灰色羊毛地毯",i:b,d:8},{n:"青色羊毛地毯",i:b,d:9},{n:"紫色羊毛地毯",i:b,d:10},{n:"蓝色羊毛地毯",i:b,d:11},{n:"棕色羊毛地毯",i:b,d:12},{n:"绿色羊毛地毯",i:b,d:13},{n:"红色羊毛地毯",i:b,d:14},{n:"黑色羊毛地毯",i:b,d:15},{n:"硬化粘土",i:172,d:0},{n:"煤块",i:173,d:0},{n:"浮冰",i:174,d:0},{n:"向日葵",i:l,d:0},{n:"欧丁香",i:l,d:1},{n:"双草丛",i:l,d:2},{n:"大型蕨",i:l,d:3},{n:"玫瑰丛",i:l,d:4},{n:"牡丹",i:l,d:5},{n:"云杉木栅栏门",i:183,d:0},{n:"白桦木栅栏门",i:184,d:0},{n:"丛林木栅栏门",i:185,d:0},{n:"深色橡木栅栏门",i:186,d:0},{n:"金合欢栅栏门",i:187,d:0},{n:"灰化土",i:243,d:0},{n:"石材切割机",i:245,d:0},{n:"发光的黑曜石",i:246,d:0},{n:"下界反应核",i:247,d:0},{n:"铁锹",i:256,d:0},{n:"铁镐",i:257,d:0},{n:"铁斧",i:258,d:0},{n:"打火石",i:259,d:0},{n:"苹果",i:260,d:0},{n:"弓",i:261,d:0},{n:"箭",i:262,d:0},{n:"煤炭",i:v,d:0},{n:"木炭",i:v,d:1},{n:"钻石",i:264,d:0},{n:"铁锭",i:265,d:0},{n:"金锭",i:266,d:0},{n:"铁剑",i:267,d:0},{n:"木剑",i:268,d:0},{n:"木锹",i:269,d:0},{n:"木镐",i:270,d:0},{n:"木斧",i:271,d:0},{n:"石剑",i:272,d:0},{n:"石锹",i:273,d:0},{n:"石镐",i:274,d:0},{n:"石斧",i:275,d:0},{n:"钻石剑",i:276,d:0},{n:"钻石锹",i:277,d:0},{n:"钻石镐",i:278,d:0},{n:"钻石斧",i:279,d:0},{n:"木棍",i:280,d:0},{n:"碗",i:281,d:0},{n:"蘑菇汤",i:282,d:0},{n:"金剑",i:283,d:0},{n:"金锹",i:284,d:0},{n:"金镐",i:285,d:0},{n:"金斧",i:286,d:0},{n:"蜘蛛丝",i:287,d:0},{n:"羽毛",i:288,d:0},{n:"火药",i:289,d:0},{n:"木锄",i:290,d:0},{n:"石锄",i:291,d:0},{n:"铁锄",i:292,d:0},{n:"钻石锄",i:293,d:0},{n:"金锄",i:294,d:0},{n:"小麦种子",i:295,d:0},{n:"小麦",i:296,d:0},{n:"面包",i:297,d:0},{n:"皮革帽子",i:298,d:0},{n:"皮革外套",i:299,d:0},{n:"皮革裤子",i:300,d:0},{n:"皮革鞋子",i:301,d:0},{n:"锁链头盔",i:302,d:0},{n:"锁链胸甲",i:303,d:0},{n:"锁链护腿",i:304,d:0},{n:"锁链靴子",i:305,d:0},{n:"铁头盔",i:306,d:0},{n:"铁胸甲",i:307,d:0},{n:"铁护腿",i:308,d:0},{n:"铁靴子",i:309,d:0},{n:"钻石头盔",i:310,d:0},{n:"钻石胸甲",i:311,d:0},{n:"钻石护腿",i:312,d:0},{n:"钻石靴子",i:313,d:0},{n:"金头盔",i:314,d:0},{n:"金胸甲",i:315,d:0},{n:"金护腿",i:316,d:0},{n:"金靴子",i:317,d:0},{n:"燧石",i:318,d:0},{n:"生猪排",i:319,d:0},{n:"熟猪排",i:320,d:0},{n:"画",i:321,d:0},{n:"告示牌",i:323,d:0},{n:"木门",i:324,d:0},{n:"牛奶桶",i:o,d:1},{n:"桶",i:o,d:0},{n:"水桶",i:o,d:8},{n:"岩浆桶",i:o,d:10},{n:"矿车",i:328,d:0},{n:"鞍",i:329,d:0},{n:"铁门",i:330,d:0},{n:"红石粉",i:331,d:0},{n:"雪球",i:332,d:0},{n:"皮革",i:334,d:0},{n:"红砖",i:336,d:0},{n:"粘土",i:337,d:0},{n:"甘蔗",i:338,d:0},{n:"纸",i:339,d:0},{n:"书",i:340,d:0},{n:"粘液球",i:341,d:0},{n:"鸡蛋",i:344,d:0},{n:"指南针",i:345,d:0},{n:"钟",i:347,d:0},{n:"荧石粉",i:348,d:0},{n:"墨囊",i:c,d:0},{n:"玫瑰红",i:c,d:1},{n:"仙人掌绿",i:c,d:2},{n:"可可豆",i:c,d:3},{n:"青金石",i:c,d:4},{n:"紫色染料",i:c,d:5},{n:"青色染料",i:c,d:6},{n:"淡灰色染料",i:c,d:7},{n:"灰色染料",i:c,d:8},{n:"粉色染料",i:c,d:9},{n:"黄绿色染料",i:c,d:10},{n:"蒲公英黄",i:c,d:11},{n:"淡蓝色染料",i:c,d:12},{n:"品红色染料",i:c,d:13},{n:"橙色染料",i:c,d:14},{n:"骨粉",i:c,d:15},{n:"骨头",i:352,d:0},{n:"糖",i:353,d:0},{n:"蛋糕",i:354,d:0},{n:"床",i:355,d:0},{n:"曲奇",i:357,d:0},{n:"剪刀",i:359,d:0},{n:"西瓜片",i:360,d:0},{n:"南瓜种子",i:361,d:0},{n:"西瓜种子",i:362,d:0},{n:"生牛排",i:363,d:0},{n:"熟牛排",i:364,d:0},{n:"生鸡肉",i:365,d:0},{n:"熟鸡肉",i:366,d:0},{n:"刷怪蛋(鸡)",i:e,d:10},{n:"刷怪蛋(牛)",i:e,d:11},{n:"刷怪蛋(猪)",i:e,d:12},{n:"刷怪蛋(羊)",i:e,d:13},{n:"刷怪蛋(狼)",i:e,d:14},{n:"刷怪蛋(村民)",i:e,d:15},{n:"刷怪蛋(哞菇)",i:e,d:16},{n:"刷怪蛋(僵尸)",i:e,d:32},{n:"刷怪蛋(爬行者)",i:e,d:33},{n:"刷怪蛋(骷髅)",i:e,d:34},{n:"刷怪蛋(蜘蛛)",i:e,d:35},{n:"刷怪蛋(僵尸猪人)",i:e,d:36},{n:"刷怪蛋(史莱姆)",i:e,d:37},{n:"刷怪蛋(末影人)",i:e,d:38},{n:"刷怪蛋(蠹虫)",i:e,d:39},{n:"绿宝石",i:388,d:0},{n:"胡萝卜",i:391,d:0},{n:"土豆",i:392,d:0},{n:"烤土豆",i:393,d:0},{n:"南瓜派",i:400,d:1},{n:"地狱砖",i:405,d:0},{n:"下界石英",i:406,d:0},{n:"甜菜根",i:457,d:0},{n:"甜菜种子",i:458,d:0},{n:"甜菜汤",i:459,d:0},{n:"流动的水*",i:8,d:0},{n:"静止的水*",i:9,d:0},{n:"流动的岩浆*",i:10,d:0},{n:"静止的岩浆*",i:11,d:0},{n:"床(方块)*",i:26,d:0},{n:"蕨(外观为草丛)*",i:31,d:0},{n:"木台阶(旧版)*",i:g,d:2},{n:"双木台阶(旧版)*",i:f,d:2},{n:"石台阶(旧版)*",i:g,d:7},{n:"双石台阶(旧版)*",i:f,d:7},{n:"火方块*",i:51,d:0},{n:"小麦庄稼*",i:59,d:0},{n:"耕地*",i:60,d:0},{n:"燃烧的熔炉*",i:62,d:0},{n:"告示牌(放在地上)*",i:63,d:0},{n:"木门(方块)*",i:64,d:0},{n:"告示牌(放在墙上)*",i:68,d:0},{n:"铁门(方块)*",i:71,d:0},{n:"发光的红石矿石*",i:74,d:0},{n:"甘蔗方块*",i:83,d:0},{n:"蛋糕方块*",i:92,d:0},{n:"隐形基岩*",i:95,d:0},{n:"南瓜梗*",i:104,d:0},{n:"西瓜梗*",i:105,d:0},{n:"可可果*",i:127,d:0},{n:"胡萝卜庄稼*",i:141,d:0},{n:"马铃薯庄稼*",i:142,d:0},{n:"甜菜庄稼*",i:244,d:0},{n:"游戏更新方块(1)*",i:248,d:0},{n:"游戏更新方块(2)*",i:249,d:0},{n:".name(技术方块)*",i:255,d:0}]',[],32,'||||||||||159|171|351||383|43|44|85||157|158|175|98||325|99|100|155|139|161|162|263'.split('|'),0,{}));
 
 //base64常量
 var btnbackgroundcode=["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",
