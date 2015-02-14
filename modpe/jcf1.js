@@ -1,6 +1,8 @@
 ﻿
 
-<Javascript常用函数 by 2639439>
+/**** Javascript常用函数 by Anvil ****/
+
+/*
 
 *省略号表示内容是可选的
 
@@ -102,5 +104,6 @@ atan2(y,x) 			返回从 x 轴到点 (x,y) 的角度（介于 -π/2 与 π/2 弧�
 
 *部分资料整理自W3SCHOOL http://www.w3school.com.cn
 
+*/
 
 
