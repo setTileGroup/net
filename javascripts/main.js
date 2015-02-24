@@ -18,8 +18,9 @@ function getCookie(c_name)
 }
 
 
+//访问权限
 var checkedid=false;
-checkidentity();
+//checkidentity();
 function checkidentity()
 {
 	//检查访问者是否有正确的cookies
@@ -56,6 +57,8 @@ function checkidentity()
 	}
 
 }
+*/
+
 
 
 
