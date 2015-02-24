@@ -28,13 +28,13 @@ var filelist=
 ,
 {n:"maa055",f:"MCPE Almighty Assistant v0.5.5",i:"mcpe全能助手v0.5.5",a:"@lzjyzq2"}
 ,
-{n:"cwt36",f:"Commom Widgets Tutorial v3.6",i:"常用控件测试v3.6(有注释版)",a:"Anvil"}
+{n:"cwt36",f:"Commom Widgets Tutorial v3.6",i:"",a:"Anvil"}
 ,
 {n:"sc2092",f:"Super Cheat build2092(非官方名称)",i:"超级辅助",a:"@ca765569811(风鸟)"}
 ,
 {n:"stk1",f:"Super Toolkit 1",i:"超级工具箱(一代)",a:"@TBPMTeam等"}
 ,
-{n:"ctmi150110",f:"Commands with TooManyItems 2015.1.10",i:"单机命令整合TMI(全能建造助手的雏形)",a:"Anvil"}
+{n:"ctmi150110",f:"Commands with TooManyItems 2015.1.10",i:"",a:"Anvil"}
 ,
 {n:"qb31",f:"Quick Build v3.1(非官方名称)",i:"快速建造",a:"@6g3y"}
 ,
