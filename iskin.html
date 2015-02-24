@@ -18,18 +18,20 @@ function getimage()
 	for(var i in tags)
 	{
 		rdm=Math.random()*187867;
-		tags[i].innerHTML="<img src='http://www.skinme.cc/skins/preview/"+rdm.toFixed(0)+".png' alt='' title='http://www.skinme.cc/skins/preview/"+rdm.toFixed(0)+".png' />";
+		tags[i].innerHTML="<img src='http://www.skinme.cc/skins/preview/"+rdm.toFixed(0)+".png' alt='' width=117 height=104 title='http://www.skinme.cc/skins/preview/"+rdm.toFixed(0)+".png' />"
+			+"<br/><img src='http://www.skinme.cc/skins/"+rdm.toFixed(0)+".png' alt='' width=64 height=32 title='http://www.skinme.cc/skins/"+rdm.toFixed(0)+".png' />";
+		tags[i].align="center";
 	}
 }
 
 </script>
 
 <a href="http://settilegroup.github.io/net/">回首页</a>   <a href="http://tieba.baidu.com/f?kw=settile">百度setTile吧</a>
-<p>来自skinme皮肤站，右键保存图片。</p><a href="http://www.skinme.cc">http://www.skinme.cc</a>
+<p>来自skinme皮肤站，右键点击下面的皮肤文件保存图片。</p><a href="http://www.skinme.cc">http://www.skinme.cc</a>
 <br/>
 <p style="color:#00D5FF;" onmouseover="this.style.color='blue';" onmouseout="this.style.color='#00D5FF';" onclick="getimage();">点击此处刷新皮肤</p>
 
-<table style="width:100%;background-color:#DDDDDD;" class="ke-zeroborder" border="0" bordercolor="#000000" cellpadding="0" cellspacing="0">
+<table style="width:100%;background-color:#DDDDDD;" class="ke-zeroborder" border="1" bordercolor="#BBBBBB" cellpadding="0" cellspacing="0">
 	<tbody>
 		<tr>
 			<td></td>
