@@ -3,15 +3,9 @@ console.log('This would be the main JS file.');
 
 
 
-$(document).ready(function(){
-  $("button").click(function(){
-    var txt="";
-    txt+="Document width/height: " + $(document).width();
-    txt+="x" + $(document).height() + "\n";
-    txt+="Window width/height: " + screen.availWidth;
-    txt+="x" + screen.availHeight;
-    alert(txt);
-  });
+$(document).ready(function()
+{
+
 });
 
 
