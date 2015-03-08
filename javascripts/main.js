@@ -4,7 +4,16 @@ console.log('This would be the main JS file.');
 if(!window.jQuery)
 	document.write('<script src="javascripts/jquery-1.11.2.min.js"><\/script>');
 
-
+$(document).ready(function(){
+  $("button").click(function(){
+    var txt="";
+    txt+="Document width/height: " + $(document).width();
+    txt+="x" + $(document).height() + "\n";
+    txt+="Window width/height: " + screen.availWidth;
+    txt+="x" + screen.availHeight;
+    alert(txt);
+  });
+});
 
 
 
@@ -66,6 +75,9 @@ function checkidentity()
 }
 
 
+/*
+//iframe检验法
+*/
 
 
 
