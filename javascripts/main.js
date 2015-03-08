@@ -1,8 +1,7 @@
 console.log('This would be the main JS file.');
 
-//载入jQuery
-if(!window.jQuery)
-	document.write('<script src="javascripts/jquery-1.11.2.min.js"></script>');
+
+
 
 $(document).ready(function(){
   $("button").click(function(){
