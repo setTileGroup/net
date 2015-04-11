@@ -5,7 +5,7 @@ console.log('This would be the main JS file.');
 
 $(document).ready(function()
 {
-
+	$("body").html("<p>施工中</p></br><text>by </text><a href='https://github.com/setTileGroup'>setTileGroup</a></br>");
 });
 
 
