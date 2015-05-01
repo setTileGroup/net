@@ -15,9 +15,10 @@
 		{
 			var tags=document.getElementsByTagName("td");
 			var rdm=0;
+			var maxskinnum=227266;    //skinme皮肤的数量，需要不断更新
 			for(var i in tags)
 			{
-				rdm=Math.random()*187867;
+				rdm=Math.random()*maxskinnum;
 				tags[i].innerHTML="<img src='http://www.skinme.cc/skins/preview/"+rdm.toFixed(0)+".png' alt='' width=117 height=104 title='http://www.skinme.cc/skins/preview/"+rdm.toFixed(0)+".png' />"
 				+"<br/><img src='http://www.skinme.cc/skins/"+rdm.toFixed(0)+".png' alt='' width=64 height=32 title='http://www.skinme.cc/skins/"+rdm.toFixed(0)+".png' />";
 				tags[i].align="center";
