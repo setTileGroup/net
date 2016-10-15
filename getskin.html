@@ -27,7 +27,8 @@
 		function getimage(id)
 		{
 			var rdm=(Math.random()*maxskinnum).toFixed(0);
-			tags[id].innerHTML="<img onmouseover='"+ tags[id] +".style.backgroundColor='#AAAAAA';' src='http://crafat.skinme.cc/renders/body/skinme"+ rdm 
+			tags[id].innerHTML="<img onmouseover='tags[" + id +"].style.backgroundColor='#AAAAAA';"
+				+"' src='http://crafat.skinme.cc/renders/body/skinme"+ rdm 
 				+"' alt='' width=126 height=134 title='http://www.skinme.cc/skins/preview/"+ rdm +".png' />"
 				+"<br/><img onerror='loaderror("+ id +");' src='http://www.skinme.cc/skins/"+ rdm 
 				+".png' alt='' width=64 height=32 title='http://www.skinme.cc/skins/"+ rdm +".png' />";
