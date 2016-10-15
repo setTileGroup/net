@@ -13,19 +13,25 @@
 	<script type="text/javascript">
 		
 		var tags=[];
+		var maxskinnum=653000; //skinme皮肤的数量，需要不断更新 最近更新20161015
 		
-		function getimage()
+		function load()
 		{
 			tags=document.getElementsByTagName("td");
-			var rdm=0;
-			var maxskinnum=653000;    //skinme皮肤的数量，需要不断更新 最近更新20161015
-			for(var i in tags)
+			for(var i=0;i<tags.length;i++)
 			{
-				rdm=Math.random()*maxskinnum;
-				tags[i].innerHTML="<img src='http://crafat.skinme.cc/renders/body/skinme"+rdm.toFixed(0)+"' alt='' width=126 height=134 title='http://www.skinme.cc/skins/preview/"+rdm.toFixed(0)+".png' />"
-				+"<br/><img onerror='loaderror("+ i +");' src='http://www.skinme.cc/skins/"+rdm.toFixed(0)+".png' alt='' width=64 height=32 title='http://www.skinme.cc/skins/"+rdm.toFixed(0)+".png' />";
-				tags[i].align="center";
+				getimage(i);
 			}
+		}
+		
+		function getimage(id)
+		{
+			var rdm=(Math.random()*maxskinnum).toFixed(0);
+			tags[id].innerHTML="<img onmouseover='"+ tags[id] +".style.backgroundColor='#AAAAAA';' src='http://crafat.skinme.cc/renders/body/skinme"+ rdm 
+				+"' alt='' width=126 height=134 title='http://www.skinme.cc/skins/preview/"+ rdm +".png' />"
+				+"<br/><img onerror='loaderror("+ id +");' src='http://www.skinme.cc/skins/"+ rdm 
+				+".png' alt='' width=64 height=32 title='http://www.skinme.cc/skins/"+ rdm +".png' />";
+			tags[id].align="center";
 		}
 		
 		function loaderror(id)
@@ -38,7 +44,7 @@
 	<a href="http://settilegroup.github.io/net/">回首页</a>   <a href="http://tieba.baidu.com/f?kw=settile">百度setTile吧</a>
 	<p>来自skinme皮肤站，右键点击下面的皮肤文件保存图片。</p><a href="http://www.skinme.cc">http://www.skinme.cc</a>
 	<br/>
-	<p style="color:#00D5FF;" onmouseover="this.style.color='blue';" onmouseout="this.style.color='#00D5FF';" onclick="getimage();">点击此处刷新皮肤</p>
+	<p style="color:#00D5FF;" onmouseover="this.style.color='blue';" onmouseout="this.style.color='#00D5FF';" onclick="load();">点击此处刷新皮肤</p>
 
 	<table style="width:100%;background-color:#DDDDDD;" class="ke-zeroborder" border="1" bordercolor="#BBBBBB" cellpadding="0" cellspacing="0">
 		<tbody>
@@ -75,7 +81,7 @@
 	<br />
 	<br />
 
-	<p>Powered by setTile.</p>
+	<p>Made by setTile. </p>
 
 
 
